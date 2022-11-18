@@ -9,21 +9,27 @@ import SwiftUI
 import CurrencyConverter
 
 struct ContentView: View {
-    @ObservedObject var currencyConveter = CurrencyViewModel()
+    @ObservedObject var model : CurrencyViewModel
+    
+    @State private var selection: SelectionType? = SelectionType.latest
+    @State private var path = NavigationPath()
     
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        NavigationSplitView {
+            SideMenu(selection: $selection)
+        } detail: {
+            NavigationStack(path: $path) {
+                DetailsView(selection: $selection, model: model)
+            }
         }
-        .padding()
+        #if os(macOS)
+        .frame(minWidth: 600, minHeight: 450)
+        #endif
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(model: CurrencyViewModel())
     }
 }

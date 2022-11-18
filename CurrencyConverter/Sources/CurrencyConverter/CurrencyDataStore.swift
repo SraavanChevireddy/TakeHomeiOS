@@ -17,8 +17,8 @@ final public class CurrencyDataStore: ObservableObject {
     
     var currencyType: CurrencyType = .latest
     
-    @Published var currencies: CurrenciesDTO!
-    @Published var historicalCurrencies: [CurrenciesDTO] = []
+    @Published public var currencies: CurrenciesDTO!
+    @Published public var historicalCurrencies: [CurrenciesDTO] = []
     
     func getPast(dates from: Date = Date(), past for: Int = 3) -> [String]{
         var currentDate = from

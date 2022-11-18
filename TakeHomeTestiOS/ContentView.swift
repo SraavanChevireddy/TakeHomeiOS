@@ -9,6 +9,7 @@ import SwiftUI
 import CurrencyConverter
 
 struct ContentView: View {
+    @ObservedObject var currencyConveter = CurrencyViewModel()
     
     var body: some View {
         VStack {

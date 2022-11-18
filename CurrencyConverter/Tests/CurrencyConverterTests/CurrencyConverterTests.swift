@@ -1,11 +1,11 @@
 import XCTest
-@testable import CurrencyConveter
+@testable import CurrencyConverter
 
-final class CurrencyConveterTests: XCTestCase {
+final class CurrencyConverterTests: XCTestCase {
     func testExample() throws {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
-        XCTAssertEqual(CurrencyConveter().text, "Hello, World!")
+        XCTAssertEqual(CurrencyConverter().text, "Hello, World!")
     }
 }

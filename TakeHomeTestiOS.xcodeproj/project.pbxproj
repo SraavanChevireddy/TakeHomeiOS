@@ -14,6 +14,7 @@
 		3C04B3692926C02300870764 /* TakeHomeTestiOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C04B3682926C02300870764 /* TakeHomeTestiOSTests.swift */; };
 		3C04B3732926C02300870764 /* TakeHomeTestiOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C04B3722926C02300870764 /* TakeHomeTestiOSUITests.swift */; };
 		3C04B3752926C02300870764 /* TakeHomeTestiOSUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C04B3742926C02300870764 /* TakeHomeTestiOSUITestsLaunchTests.swift */; };
+		3C04B3872927E19E00870764 /* CurrencyConverter in Frameworks */ = {isa = PBXBuildFile; productRef = 3C04B3862927E19E00870764 /* CurrencyConverter */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +46,7 @@
 		3C04B36E2926C02300870764 /* TakeHomeTestiOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TakeHomeTestiOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C04B3722926C02300870764 /* TakeHomeTestiOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeHomeTestiOSUITests.swift; sourceTree = "<group>"; };
 		3C04B3742926C02300870764 /* TakeHomeTestiOSUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeHomeTestiOSUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		3C04B3842927DC2F00870764 /* CurrencyConverter */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = CurrencyConverter; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +54,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C04B3872927E19E00870764 /* CurrencyConverter in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,10 +78,12 @@
 		3C04B34A2926C02000870764 = {
 			isa = PBXGroup;
 			children = (
+				3C04B3842927DC2F00870764 /* CurrencyConverter */,
 				3C04B3552926C02000870764 /* TakeHomeTestiOS */,
 				3C04B3672926C02300870764 /* TakeHomeTestiOSTests */,
 				3C04B3712926C02300870764 /* TakeHomeTestiOSUITests */,
 				3C04B3542926C02000870764 /* Products */,
+				3C04B3852927E19E00870764 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -129,6 +134,13 @@
 			path = TakeHomeTestiOSUITests;
 			sourceTree = "<group>";
 		};
+		3C04B3852927E19E00870764 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -145,6 +157,9 @@
 			dependencies = (
 			);
 			name = TakeHomeTestiOS;
+			packageProductDependencies = (
+				3C04B3862927E19E00870764 /* CurrencyConverter */,
+			);
 			productName = TakeHomeTestiOS;
 			productReference = 3C04B3532926C02000870764 /* TakeHomeTestiOS.app */;
 			productType = "com.apple.product-type.application";
@@ -429,7 +444,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
@@ -467,7 +482,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
@@ -612,6 +627,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3C04B3862927E19E00870764 /* CurrencyConverter */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CurrencyConverter;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3C04B34B2926C02000870764 /* Project object */;
 }

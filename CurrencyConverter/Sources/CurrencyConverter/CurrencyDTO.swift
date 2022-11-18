@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CurrenciesDTO: Decodable {
+public struct CurrenciesDTO: Decodable {
     let success: Bool?
     let timestamp: Int?
     let base, date: String?

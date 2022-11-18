@@ -10,7 +10,7 @@ import Combine
 
 public class CurrencyViewModel: ObservableObject {
     
-    private var datastore: CurrencyDataStore!
+    public var datastore: CurrencyDataStore!
     private var disposables = Set<AnyCancellable>()
     
     public init(){
@@ -20,11 +20,13 @@ public class CurrencyViewModel: ObservableObject {
     private func addSubscriptions() {
         datastore = CurrencyDataStore()
         Task(priority: .high) {
-            try? await fetch(currencies: .historical)
+            try? await fetch(currencies: .latest)
+            try? await fetch(currencies: .historical, forPast: 3)
+            
         }
     }
     
-    private func fetch(currencies currencyType: CurrencyType = .latest) async throws {
+    private func fetch(currencies currencyType: CurrencyType = .latest, forPast:Int? = nil) async throws {
         var endPointType: String!
         
         switch currencyType{
@@ -32,7 +34,7 @@ public class CurrencyViewModel: ObservableObject {
             endPointType = Endpoints.fetchHistorical.rawValue
             datastore.historicalCurrencies.removeAll()
             
-            for eachDate in datastore.getPast() {
+            for eachDate in datastore.getPast(past: forPast ?? 0) {
                 guard let url = URL(string: currencyDomain + endPointType + "/\(eachDate)") else {
                     return
                 }
@@ -53,7 +55,6 @@ public class CurrencyViewModel: ObservableObject {
                             case .finished: debugPrint("response received")
                             }
                         } receiveValue: { [unowned self] historicalData in
-                            print("ZING!!")
                             datastore.historicalCurrencies.append(historicalData)
                         }.store(in: &disposables)
                     }

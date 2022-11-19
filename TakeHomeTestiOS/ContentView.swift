@@ -9,7 +9,7 @@ import SwiftUI
 import CurrencyConverter
 
 struct ContentView: View {
-    @ObservedObject var model : CurrencyViewModel
+    @StateObject var model : CurrencyViewModel
     
     @State private var selection: CurrencyType? = CurrencyType.latest
     @State private var path = NavigationPath()

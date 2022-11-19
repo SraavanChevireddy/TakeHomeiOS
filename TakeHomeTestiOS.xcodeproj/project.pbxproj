@@ -19,7 +19,6 @@
 		3C8450FE2927FFBD00B792DA /* DetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8450FD2927FFBD00B792DA /* DetailsView.swift */; };
 		3C845101292801AB00B792DA /* ConverterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C845100292801AB00B792DA /* ConverterView.swift */; };
 		3C845104292801E700B792DA /* HistoricalDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C845103292801E700B792DA /* HistoricalDataView.swift */; };
-		3C845106292802E100B792DA /* WidthThresholdReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C845105292802E100B792DA /* WidthThresholdReader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,7 +55,6 @@
 		3C8450FD2927FFBD00B792DA /* DetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsView.swift; sourceTree = "<group>"; };
 		3C845100292801AB00B792DA /* ConverterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterView.swift; sourceTree = "<group>"; };
 		3C845103292801E700B792DA /* HistoricalDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricalDataView.swift; sourceTree = "<group>"; };
-		3C845105292802E100B792DA /* WidthThresholdReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidthThresholdReader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,7 +157,6 @@
 			children = (
 				3C8450FB2927FFAB00B792DA /* SideMenu.swift */,
 				3C8450FD2927FFBD00B792DA /* DetailsView.swift */,
-				3C845105292802E100B792DA /* WidthThresholdReader.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -316,7 +313,6 @@
 				3C845104292801E700B792DA /* HistoricalDataView.swift in Sources */,
 				3C8450FC2927FFAB00B792DA /* SideMenu.swift in Sources */,
 				3C8450FE2927FFBD00B792DA /* DetailsView.swift in Sources */,
-				3C845106292802E100B792DA /* WidthThresholdReader.swift in Sources */,
 				3C04B3592926C02000870764 /* ContentView.swift in Sources */,
 				3C845101292801AB00B792DA /* ConverterView.swift in Sources */,
 				3C04B3572926C02000870764 /* TakeHomeTestiOSApp.swift in Sources */,

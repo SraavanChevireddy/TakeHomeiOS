@@ -8,21 +8,16 @@
 import SwiftUI
 import CurrencyConverter
 
-/// An enum that represents the currency's selection in the app's sidebar.
-enum SelectionType: Hashable {
-    case latest
-    case historicalData
-}
 
 struct SideMenu: View {
-    @Binding var selection: SelectionType?
+    @Binding var selection: CurrencyType?
     var body: some View {
         List(selection: $selection) {
-            NavigationLink(value: SelectionType.latest) {
+            NavigationLink(value: CurrencyType.latest) {
                 Label("Converter", systemImage: "box.truck")
             }
             
-            NavigationLink(value: SelectionType.historicalData) {
+            NavigationLink(value: CurrencyType.historical) {
                 Label("Historical Data", systemImage: "shippingbox")
             }
         }

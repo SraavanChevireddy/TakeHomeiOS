@@ -8,11 +8,11 @@
 import Foundation
 
 public struct CurrenciesDTO: Decodable {
-    let success: Bool?
-    let timestamp: Int?
-    let base, date: String?
-    let rates: [String: Double]?
+    public var success: Bool?
+    public var timestamp: Int?
+    public var base, date: String?
+    public var rates: [String: Double]?
     
     /// `historical` is an optional key. Can be decoded only while fetching the historical data.
-    var historical: Bool?
+    public var historical: Bool?
 }

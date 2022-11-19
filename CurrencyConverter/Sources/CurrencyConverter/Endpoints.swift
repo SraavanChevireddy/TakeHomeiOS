@@ -14,3 +14,8 @@ enum Endpoints: String {
     case fetchHistorical = "fixer"
 }
 
+public enum CurrencyErrors: Error {
+    case currencyNotFound
+    case invalidInput
+}
+

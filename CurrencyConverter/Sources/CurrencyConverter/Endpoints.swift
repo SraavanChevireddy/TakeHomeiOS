@@ -19,3 +19,8 @@ public enum CurrencyErrors: Error {
     case invalidInput
 }
 
+public enum AppState {
+    case loading
+    case idle
+    case error
+}

@@ -14,6 +14,9 @@ public class CurrencyViewModel: ObservableObject {
     public var datastore: CurrencyDataStore!
     private var disposables = Set<AnyCancellable>()
     
+    @Published public var appState = AppState.idle
+    @Published public var result: Double = 0.0
+    
     public init(){
         addSubscriptions()
     }
@@ -21,8 +24,9 @@ public class CurrencyViewModel: ObservableObject {
     private func addSubscriptions() {
         datastore = CurrencyDataStore()
         Task(priority: .high) {
+            appState = .loading
             try? await fetch(currencies: .latest)
-//            try? await fetch(currencies: .historical, forPast: 3)
+            try? await fetch(currencies: .historical, forPast: 3)
         }
     }
     
@@ -48,15 +52,17 @@ public class CurrencyViewModel: ObservableObject {
                     }
                     
                     for try await eachCurrency in group{
-                        eachCurrency.sink { result in
+                        eachCurrency.sink { [unowned self] result in
                             switch result {
                             case .failure(let err):
                                 debugPrint(err.localizedDescription)
+                                appState = .error
                             case .finished: debugPrint("response received")
                             }
                         } receiveValue: { [unowned self] historicalData in
                             objectWillChange.send()
                             datastore.historicalCurrencies.append(historicalData)
+                            appState = .idle
                         }.store(in: &disposables)
                     }
                 }
@@ -71,16 +77,21 @@ public class CurrencyViewModel: ObservableObject {
             request.setValue("SizA2Lf7p0YHqmDi9BdOz2Wv7l4qsDlN", forHTTPHeaderField: "apikey")
             
             try? await fetchCurrencies(for: request)
-                .sink(receiveCompletion: { result in
+                .sink(receiveCompletion: { [weak self] result in
+                    guard let self = self else {return}
                     switch result {
                     case .failure(let err):
                         debugPrint(err.localizedDescription)
+                        self.appState = .error
                     case .finished: debugPrint("response received")
                     }
-                }, receiveValue: { [unowned self] latestCurrency in
-                    objectWillChange.send()
-                    datastore.fromCurrency = latestCurrency.base ?? ""
-                    datastore.currencies = latestCurrency
+                }, receiveValue: { [weak self] latestCurrency in
+                    guard let self = self else {return}
+                    self.objectWillChange.send()
+                    self.datastore.fromCurrency = latestCurrency.base ?? ""
+                    self.datastore.baseCurrency = latestCurrency.base ?? ""
+                    self.datastore.currencies = latestCurrency
+                    self.appState = .idle
                 }).store(in: &disposables)
         }
     }
@@ -97,6 +108,33 @@ public class CurrencyViewModel: ObservableObject {
             .decode(type: CurrenciesDTO.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
+    }
+
+    // MARK: Currency
+    
+    public var userGettingMoreCurrency: Bool {
+        result > datastore.input
+    }
+    public func convertCurrency() {
+        do {
+            result = try datastore.calculateResult()
+            groupCurrencyById()
+        } catch {
+            debugPrint(error.localizedDescription)
+            appState = .error
+        }
+    }
+
+    public func groupCurrencyById() {
+        var groupedResult: Dictionary<String, Double> = [:]
+        datastore.historicalCurrencies.forEach { eachYear in
+            if let currency = eachYear.rates {
+                groupedResult.merge(zip(currency.keys, currency.values)) { currentValue, newValue in
+                    currentValue
+                }
+            }
+        }
+        print("HEHE \(groupedResult)")
     }
 }
 

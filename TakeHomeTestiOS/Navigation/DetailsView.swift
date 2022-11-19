@@ -13,13 +13,13 @@ struct DetailsView: View {
     @Binding var selection: CurrencyType?
     /// The app's model the superview must pass in.
     
-    @ObservedObject var model: CurrencyViewModel
+    @StateObject var model: CurrencyViewModel
     var body: some View {
         switch selection ?? .latest {
         case .latest:
             ConverterView(model: model, navigationSelection: $selection)
         case .historical:
-            HistoricalDataView()
+            HistoricalDataView(model: model)
         }
     }
 }

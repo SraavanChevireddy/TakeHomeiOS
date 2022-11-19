@@ -9,61 +9,83 @@ import SwiftUI
 import CurrencyConverter
 
 struct ConverterView: View {
-    @ObservedObject var model: CurrencyViewModel
+    @StateObject var model: CurrencyViewModel
     @Binding var navigationSelection: CurrencyType?
     
     var body: some View {
         ScrollView(.vertical) {
-            VStack(spacing: 16) {
-                Image("Banner")
-                    .resizable()
-                    .frame(height: 200)
-                
-                Menu  {
+            if model.appState == .loading {
+                ProgressView("Loading")
+            } else {
+                VStack(spacing: 16) {
                     if let currencies = model.datastore.currencies, let rates = currencies.rates {
-                        ForEach(rates.keys.sorted(), id: \.self){ eachKey in
-                            Text("\(eachKey) - \(rates[eachKey] ?? 0)")
-                        }
-                    }
-                } label: {
-                    Text("\(model.datastore.fromCurrency ?? "")")
-                }
-                
-                TextField("Currency Input", text: $model.datastore.inputCurrency, prompt: Text("Enter your Currency Value"))
-                    .keyboardType(.numberPad)
-                
-                Menu  {
-                    if let currencies = model.datastore.currencies, let rates = currencies.rates {
-                        ForEach(rates.keys.sorted(), id: \.self){ eachKey in
-                            Button {
-                                model.datastore.toCurrency = eachKey
-                            } label: {
-                                Text("\(eachKey)")
+                        Menu  {
+                            ForEach(rates.keys.sorted(), id: \.self){ eachKey in
+                                Button {
+                                    model.datastore.fromCurrency = eachKey
+                                } label: {
+                                    Text("\(eachKey) - \(rates[eachKey] ?? 0, specifier: "%.2f")")
+                                }
+                                
                             }
+                        } label: {
+                            Label("\(currencies.base ?? "") - \(rates[currencies.base ?? ""] ?? 0.0, specifier: "%.2f")", systemImage: "hand.tap.fill")
+                                .tint(.indigo)
+                            
                         }
+                        
+                        TextField("Amount", text: $model.datastore.userInput, prompt: Text("Enter the Amount"))
+                            .font(.system(.title3, design: .rounded, weight: .semibold))
+                            .foregroundColor(.indigo)
+                            .keyboardType(.numberPad)
+                        
+                        Menu  {
+                            ForEach(rates.keys.sorted(), id: \.self){ eachKey in
+                                Button {
+                                    model.datastore.toCurrency = eachKey
+                                } label: {
+                                    Text("\(eachKey)")
+                                }
+                            }
+                        } label: {
+                            Text("\(model.datastore.toCurrency.isEmpty ? "Choose Currency to Convert" : model.datastore.toCurrency)")
+                                .foregroundColor(.white)
+                                .font(.system(.title3, design: .rounded, weight: .bold))
+                                .padding()
+                                .background(Color.indigo)
+                                .clipShape(Capsule())
+                        }
+                        
                     }
-                } label: {
-                    Text("\(model.datastore.toCurrency)")
-                }
-
-                if let result = try? model.datastore.calculateResult() {
-                    Text("Your currency in \(model.datastore.toCurrency)")
-                        .foregroundColor(.secondary)
-                        .font(.system(.body, design: .rounded))
-                        .bold()
-                        .textCase(.uppercase)
+                    Button {
+                        model.convertCurrency()
+                    } label: {
+                        Text("Convert")
+                    }.tint(.indigo)
+                        .buttonStyle(.bordered)
+                        .buttonBorderShape(.capsule)
                     
-                    Text("\(result)")
-                        .font(.system(.largeTitle, design: .rounded))
-                        .bold()
-                } else {
-                    Text("Unknown error occured.")
-                        .foregroundColor(.red)
-                        .font(.system(.largeTitle, design: .rounded))
-                        .bold()
-                }
+                    if let conversion = model.result {
+                        Text("Your currency in \(model.datastore.toCurrency)")
+                            .foregroundColor(.secondary)
+                            .font(.system(.body, design: .rounded))
+                            .bold()
+                            .textCase(.uppercase)
+                        
+                        Label("\(conversion)", systemImage: model.userGettingMoreCurrency ? "arrowtriangle.up.fill" : "arrowtriangle.down.fill")
+                            .foregroundColor(model.userGettingMoreCurrency ? Color.green : Color.red)
+                            .font(.system(.largeTitle, design: .rounded))
+                            .bold()
+                            .tint(model.userGettingMoreCurrency ? Color.green : Color.red)
+                    } else {
+                        Text("Unknown error occured.")
+                            .foregroundColor(.red)
+                            .font(.system(.largeTitle, design: .rounded))
+                            .bold()
+                    }
+                }.padding()
             }
-        }.ignoresSafeArea(.all)
+        }.frame(maxWidth: .infinity)
 #if os(iOS)
             .background(Color(uiColor: .systemGroupedBackground))
 #else

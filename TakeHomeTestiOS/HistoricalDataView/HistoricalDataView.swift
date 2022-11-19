@@ -6,8 +6,12 @@
 //
 
 import SwiftUI
+import Charts
+import CurrencyConverter
 
 struct HistoricalDataView: View {
+    @StateObject var model : CurrencyViewModel
+    
     var body: some View {
         Text("Historical Data View")
     }
@@ -15,6 +19,6 @@ struct HistoricalDataView: View {
 
 struct HistoricalDataView_Previews: PreviewProvider {
     static var previews: some View {
-        HistoricalDataView()
+        HistoricalDataView(model: CurrencyViewModel())
     }
 }

@@ -10,7 +10,7 @@ import CurrencyConverter
 
 struct DetailsView: View {
     /// This value is a binding, and the superview must pass in its value.
-    @Binding var selection: SelectionType?
+    @Binding var selection: CurrencyType?
     /// The app's model the superview must pass in.
     
     @ObservedObject var model: CurrencyViewModel
@@ -18,7 +18,7 @@ struct DetailsView: View {
         switch selection ?? .latest {
         case .latest:
             ConverterView(model: model, navigationSelection: $selection)
-        case .historicalData:
+        case .historical:
             HistoricalDataView()
         }
     }

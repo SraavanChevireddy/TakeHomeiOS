@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 
+@MainActor
 public class CurrencyViewModel: ObservableObject {
     
     public var datastore: CurrencyDataStore!
@@ -21,8 +22,7 @@ public class CurrencyViewModel: ObservableObject {
         datastore = CurrencyDataStore()
         Task(priority: .high) {
             try? await fetch(currencies: .latest)
-            try? await fetch(currencies: .historical, forPast: 3)
-            
+//            try? await fetch(currencies: .historical, forPast: 3)
         }
     }
     
@@ -55,6 +55,7 @@ public class CurrencyViewModel: ObservableObject {
                             case .finished: debugPrint("response received")
                             }
                         } receiveValue: { [unowned self] historicalData in
+                            objectWillChange.send()
                             datastore.historicalCurrencies.append(historicalData)
                         }.store(in: &disposables)
                     }
@@ -77,6 +78,8 @@ public class CurrencyViewModel: ObservableObject {
                     case .finished: debugPrint("response received")
                     }
                 }, receiveValue: { [unowned self] latestCurrency in
+                    objectWillChange.send()
+                    datastore.fromCurrency = latestCurrency.base ?? ""
                     datastore.currencies = latestCurrency
                 }).store(in: &disposables)
         }
@@ -95,6 +98,5 @@ public class CurrencyViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
-    
 }
 

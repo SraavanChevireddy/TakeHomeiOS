@@ -11,7 +11,7 @@ import CurrencyConverter
 struct ContentView: View {
     @ObservedObject var model : CurrencyViewModel
     
-    @State private var selection: SelectionType? = SelectionType.latest
+    @State private var selection: CurrencyType? = CurrencyType.latest
     @State private var path = NavigationPath()
     
     var body: some View {

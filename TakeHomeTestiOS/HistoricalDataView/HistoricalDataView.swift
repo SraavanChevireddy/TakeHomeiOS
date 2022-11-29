@@ -24,7 +24,10 @@ struct HistoricalDataView: View {
                     }
                 } label: {
                     Text("Select your Country")
-                }.pickerStyle(.navigationLink)
+                }
+#if os(iOS)
+                .pickerStyle(.navigationLink)
+#endif
             }
             
             Section {

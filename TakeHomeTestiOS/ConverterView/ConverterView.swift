@@ -11,6 +11,7 @@ import CurrencyConverter
 struct ConverterView: View {
     @StateObject var model: CurrencyViewModel
     @Binding var navigationSelection: CurrencyType?
+    @FocusState private var focused: Bool
     
     var body: some View {
         ScrollView(.vertical) {
@@ -23,6 +24,7 @@ struct ConverterView: View {
                             ForEach(rates.keys.sorted(), id: \.self){ eachKey in
                                 Button {
                                     model.datastore.fromCurrency = eachKey
+                                    focused = true
                                 } label: {
                                     Text("\(eachKey) - \(rates[eachKey] ?? 0, specifier: "%.2f")")
                                 }
@@ -35,7 +37,10 @@ struct ConverterView: View {
                         TextField("Amount", text: $model.datastore.userInput, prompt: Text("Enter the Amount"))
                             .font(.system(.title3, design: .rounded, weight: .semibold))
                             .foregroundColor(.indigo)
+#if os(iOS)
                             .keyboardType(.numberPad)
+#endif
+                            .focused(self.$focused)
                         
                         Menu  {
                             ForEach(rates.keys.sorted(), id: \.self){ eachKey in
@@ -61,7 +66,9 @@ struct ConverterView: View {
                         Text("Convert")
                     }.tint(.indigo)
                         .buttonStyle(.bordered)
+#if os(iOS)
                         .buttonBorderShape(.capsule)
+                    #endif
                     
                     if let conversion = model.result {
                         Text("Your currency in \(model.datastore.toCurrency)")

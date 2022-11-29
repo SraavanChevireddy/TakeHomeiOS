@@ -11,9 +11,31 @@ import CurrencyConverter
 
 struct HistoricalDataView: View {
     @StateObject var model : CurrencyViewModel
+    @State private var selectedCountryCode: String = "EUR"
     
     var body: some View {
-        Text("Historical Data View")
+        Form {
+            Section{
+                Picker(selection: $selectedCountryCode) {
+                    if let currencies = model.datastore.currencies, let rates = currencies.rates {
+                        ForEach(rates.keys.sorted(), id: \.self){ eachKey in
+                            Text(eachKey)
+                        }
+                    }
+                } label: {
+                    Text("Select your Country")
+                }.pickerStyle(.navigationLink)
+            }
+            
+            Section {
+                Button(role: .destructive) {
+                    debugPrint("SignOut")
+                } label: {
+                    Text("Sign out")
+                }
+
+            }
+        }
     }
 }
 

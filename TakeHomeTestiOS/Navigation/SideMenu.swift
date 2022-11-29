@@ -18,13 +18,17 @@ struct SideMenu: View {
             }
             
             NavigationLink(value: CurrencyType.historical) {
-                Label("Historical Data", systemImage: "shippingbox")
+                Label("Historical Data", systemImage: "clock.fill")
+            }
+            
+            NavigationLink(value: CurrencyType.popular) {
+                Label("Popular", systemImage: "star.fill")
             }
         }
         .navigationTitle("Currency Conveter")
-        #if os(macOS)
+#if os(macOS)
         .navigationSplitViewColumnWidth(min: 200, ideal: 200)
-        #endif
+#endif
     }
 }
 

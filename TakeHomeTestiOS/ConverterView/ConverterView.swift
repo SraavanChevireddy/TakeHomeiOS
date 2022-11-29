@@ -26,12 +26,10 @@ struct ConverterView: View {
                                 } label: {
                                     Text("\(eachKey) - \(rates[eachKey] ?? 0, specifier: "%.2f")")
                                 }
-                                
                             }
                         } label: {
-                            Label("\(currencies.base ?? "") - \(rates[currencies.base ?? ""] ?? 0.0, specifier: "%.2f")", systemImage: "hand.tap.fill")
+                            Label(model.datastore.fromCurrency, systemImage: "hand.tap.fill")
                                 .tint(.indigo)
-                            
                         }
                         
                         TextField("Amount", text: $model.datastore.userInput, prompt: Text("Enter the Amount"))

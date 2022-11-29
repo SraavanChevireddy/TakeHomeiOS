@@ -12,7 +12,13 @@ struct PopularCurrenciesView: View {
     @StateObject var model: CurrencyViewModel
     
     var body: some View {
-        Text("Hello, World!")
+        VStack{
+            Text("Coming Soon")
+                .font(.system(.title3, design: .rounded, weight: .bold))
+                
+            Text("We are actively working on giving you a better experience")
+                .foregroundColor(.secondary)
+        }
             .navigationTitle("Popular")
     }
 }

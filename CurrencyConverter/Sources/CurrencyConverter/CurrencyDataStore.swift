@@ -11,6 +11,7 @@ import Combine
 public enum CurrencyType : Hashable{
     case historical
     case latest
+    case popular
 }
 
 final public class CurrencyDataStore: ObservableObject {
@@ -53,7 +54,7 @@ final public class CurrencyDataStore: ObservableObject {
     public func calculateResult() throws -> Double {
         if let currency = currencies, let currencyRate = currency.rates, let payRate = currencyRate[toCurrency] {
             if let basePay = baseCurrency, let basePayRate = currencyRate[basePay] {
-                return (input/payRate) * basePayRate
+                return calculateConversion(on: input, payrate: payRate, basePayRate)
             } else {
                 currencyError = CurrencyErrors.invalidInput
                 throw currencyError
@@ -66,4 +67,29 @@ final public class CurrencyDataStore: ObservableObject {
             throw currencyError
         }
     }
+    
+    /// To return the historical data of the currency for past three dates.
+    /// - Parameter byKey: Country code for historical information
+    /// - Returns: The array of past values that the currency holds for the available dates.
+    public func historicalConversion(byKey: String) -> [Double] {
+        var pastCurrency: [Double] = []
+        historicalCurrencies.forEach { eachDTO in
+            if let rates = eachDTO.rates {
+                pastCurrency.append(rates[byKey] ?? 0.0)
+            }
+        }
+        return pastCurrency
+    }
+    
+    /// To convert the currency from one currency to another.
+    ///
+    /// - Parameters:
+    ///   - input: The currency amount you wanted to convert
+    ///   - payrate: The base payrate of the currency you wanted to convert against. In this case base is `EUR`.
+    ///   - basePayRate: The base payrate is the currency value that is received from the `APILayer`
+    /// - Returns: The converted currency value from after the conversion.
+    func calculateConversion(on input: Double, payrate: Double, _ basePayRate: Double) -> Double {
+        (input/payrate) * basePayRate
+    }
+    
 }

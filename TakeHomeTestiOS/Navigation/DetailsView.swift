@@ -20,6 +20,8 @@ struct DetailsView: View {
             ConverterView(model: model, navigationSelection: $selection)
         case .historical:
             HistoricalDataView(model: model)
+        case .popular:
+            PopularCurrenciesView(model: model)
         }
     }
 }

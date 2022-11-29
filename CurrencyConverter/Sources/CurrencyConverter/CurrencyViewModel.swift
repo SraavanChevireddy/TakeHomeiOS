@@ -10,9 +10,9 @@ import Combine
 
 @MainActor
 public class CurrencyViewModel: ObservableObject {
-    
-    public var datastore: CurrencyDataStore!
-    private var disposables = Set<AnyCancellable>()
+     
+    @Published public var datastore: CurrencyDataStore!
+     private var disposables = Set<AnyCancellable>()
     
     @Published public var appState = AppState.idle
     @Published public var result: Double = 0.0
@@ -30,7 +30,7 @@ public class CurrencyViewModel: ObservableObject {
         }
     }
     
-    private func fetch(currencies currencyType: CurrencyType = .latest, forPast:Int? = nil) async throws {
+    public func fetch(currencies currencyType: CurrencyType = .latest, forPast:Int? = nil) async throws {
         var endPointType: String!
         
         switch currencyType{
@@ -42,13 +42,12 @@ public class CurrencyViewModel: ObservableObject {
                 guard let url = URL(string: currencyDomain + endPointType + "/\(eachDate)") else {
                     return
                 }
-                try? await withThrowingTaskGroup(of: AnyPublisher<CurrenciesDTO, Error>.self) { group in
-                    
+                try? await withThrowingTaskGroup(of: AnyPublisher<CurrenciesDTO, Error>.self) { [weak self] group in
+                    guard let self = self else {
+                        return
+                    }
                     group.addTask {
-                        var request = URLRequest(url: url)
-                        request.httpMethod = "GET"
-                        request.setValue("SizA2Lf7p0YHqmDi9BdOz2Wv7l4qsDlN", forHTTPHeaderField: "apikey")
-                        return try await self.fetchCurrencies(for: request)
+                        return try await self.fetchCurrencies(for: self.generateRequest(from: url))
                     }
                     
                     for try await eachCurrency in group{
@@ -56,13 +55,13 @@ public class CurrencyViewModel: ObservableObject {
                             switch result {
                             case .failure(let err):
                                 debugPrint(err.localizedDescription)
-                                appState = .error
+                                self.appState = .error
                             case .finished: debugPrint("response received")
                             }
-                        } receiveValue: { [unowned self] historicalData in
-                            objectWillChange.send()
-                            datastore.historicalCurrencies.append(historicalData)
-                            appState = .idle
+                        } receiveValue: { historicalData in
+                            self.objectWillChange.send()
+                            self.datastore.historicalCurrencies.append(historicalData)
+                            self.appState = .idle
                         }.store(in: &disposables)
                     }
                 }
@@ -72,11 +71,8 @@ public class CurrencyViewModel: ObservableObject {
             guard let url = URL(string: currencyDomain + endPointType) else {
                 return
             }
-            var request = URLRequest(url: url)
-            request.httpMethod = "GET"
-            request.setValue("SizA2Lf7p0YHqmDi9BdOz2Wv7l4qsDlN", forHTTPHeaderField: "apikey")
             
-            try? await fetchCurrencies(for: request)
+            try? await fetchCurrencies(for: generateRequest(from: url))
                 .sink(receiveCompletion: { [weak self] result in
                     guard let self = self else {return}
                     switch result {
@@ -93,10 +89,12 @@ public class CurrencyViewModel: ObservableObject {
                     self.datastore.currencies = latestCurrency
                     self.appState = .idle
                 }).store(in: &disposables)
+        case .popular:
+            break // Future enhancement
         }
     }
     
-    private func fetchCurrencies(for request: URLRequest) async throws  -> AnyPublisher<CurrenciesDTO, Error> {
+    public func fetchCurrencies(for request: URLRequest) async throws  -> AnyPublisher<CurrenciesDTO, Error> {
         return URLSession.shared.dataTaskPublisher(for: request)
             .tryMap() { element -> Data in
                 guard let httpResponse = element.response as? HTTPURLResponse,
@@ -108,6 +106,13 @@ public class CurrencyViewModel: ObservableObject {
             .decode(type: CurrenciesDTO.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
+    }
+    
+    public func generateRequest(from url:URL) -> URLRequest {
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("07ga6NRU0b5Vh6upYGe9o0dD8krbFO0N", forHTTPHeaderField: "apikey")
+        return request
     }
 
     // MARK: Currency
@@ -134,7 +139,7 @@ public class CurrencyViewModel: ObservableObject {
                 }
             }
         }
-        print("HEHE \(groupedResult)")
+        debugPrint("HEHE \(groupedResult)")
     }
 }
 
